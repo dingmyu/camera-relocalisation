@@ -104,11 +104,11 @@ for k=1:number_of_pairs
         % directions from db to q: t1, t2 such that the z-cordinate is 1
         P1 = P{i};
         P2 = P{NN_count};      
-        t1 = t_q_NN(i,:)./t_q_NN(i,3);　　　　#用最后一维标准化
+        t1 = t_q_NN(i,:)./t_q_NN(i,3);　　　　%用最后一维标准化
         t2 = t_q_NN(NN_count,:)./t_q_NN(NN_count,3);
         matches(1,1:2) = t1(1:2);
         matches(1,3:4) = t2(1:2);
-        X = triangmidpoints(matches, P1, P2);　#３＊１
+        X = triangmidpoints(matches, P1, P2);　%３＊１
         
         trans_tmp(allPairs,:) = X;
     end
