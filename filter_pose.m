@@ -13,7 +13,7 @@ elseif strcmp(dataset_name, 'University')
 else
     error('Please, specify dataset_name variable properly [7-Scenes or University]');
 end
-
+% pic1 pic2 scene1 scene2 equal T R T R
 data_cells = textscan(file_id, '%s %s %d %d %d %f %f %f %f %f %f %f %f %f %f %f %f %f %f');
 translation_gt_q = [data_cells{1,4+2} data_cells{1,5+2} data_cells{1,6+2}];
 orientation_gt_q = [data_cells{1,7+2} data_cells{1,8+2} data_cells{1,9+2} ...
