@@ -108,7 +108,7 @@ for k=1:number_of_pairs
         t2 = t_q_NN(NN_count,:)./t_q_NN(NN_count,3);
         matches(1,1:2) = t1(1:2);
         matches(1,3:4) = t2(1:2);
-        X = triangmidpoints(matches, P1, P2);　%３＊１
+        X = triangmidpoints(matches, P1, P2);　%３＊１,用两个点的位置和两个相对位置，求解出query帧的位置
         
         trans_tmp(allPairs,:) = X;
     end
@@ -192,7 +192,7 @@ for k=1:number_of_pairs
 %             
         end
 
-        %% filtering process for rotation
+        %% filtering process for rotation　　从五个里选取一个或者多个，取平均角度
         
         thresh_ort = 20; %10 degrees
         inlier_cnt = zeros(1,5); % store the inlier count estimates of the triangulated camera locs
