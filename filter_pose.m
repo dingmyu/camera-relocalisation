@@ -4,7 +4,7 @@ addpath('utils')
 
 dataset_name = '7-Scenes'; % or 'University'
 % file id with estimates produced by CNN
-pred_file_id = fopen('cnn_part/results/7scenes_res.bin', 'r');
+pred_file_id = fopen('result_aux.bin', 'r');
 % getting GT file
 if strcmp(dataset_name, '7-Scenes')
     file_id = fopen('cnn_part/data/NN_7scenes.txt');
@@ -13,7 +13,7 @@ elseif strcmp(dataset_name, 'University')
 else
     error('Please, specify dataset_name variable properly [7-Scenes or University]');
 end
-% pic1 pic2 scene1 scene2 equal T R T R
+% pic1 pic2 scene1 scene2 equal T R T R　　　　　query database
 data_cells = textscan(file_id, '%s %s %d %d %d %f %f %f %f %f %f %f %f %f %f %f %f %f %f');
 translation_gt_q = [data_cells{1,4+2} data_cells{1,5+2} data_cells{1,6+2}];
 orientation_gt_q = [data_cells{1,7+2} data_cells{1,8+2} data_cells{1,9+2} ...
@@ -77,23 +77,23 @@ for k=1:number_of_pairs
     R_q_est = R_db*delR_est;
     %------- translation
     t_est_center = translation_est(k,:)./norm(translation_est(k,:)); % (C_i - C_j)
-    t_est = (R_db'*t_est_center'); %R_j'(C_i - C_j)
+    t_est = (R_db'*t_est_center'); %R_j'(C_i - C_j)　　　　转换到Ｒ的坐标系的Ｔ
     
     %% -------------------------------------------------------------------------
     % store the estimations and db pose estimations for each NN related to
     % a query
     NN_count = NN_count + 1;
-    R_q_NN(NN_count,:) = rotm2quat(R_q_est);
-    t_q_NN(NN_count,:) = t_est;
+    R_q_NN(NN_count,:) = rotm2quat(R_q_est); %估计的和数据库的算出来的Ｒ
+    t_q_NN(NN_count,:) = t_est; %估计的和数据库的算出来的转换到Ｒ的坐标系的Ｔ
     
-    R_db_NN(NN_count,:) = rotm2quat(R_db);
-    t_db_NN(NN_count,:) = t_db;
+    R_db_NN(NN_count,:) = rotm2quat(R_db); %数据库的Ｒ
+    t_db_NN(NN_count,:) = t_db; %数据库的Ｔ
     
-    P{NN_count} = [R_db' -R_db'*t_db'];
+    P{NN_count} = [R_db' -R_db'*t_db'];　%数据库的Ｒ‘　转换到Ｒ的坐标系的Ｔ　　３＊４
     
-    centers_rel_network(NN_count,:) = t_est_center;
+    centers_rel_network(NN_count,:) = t_est_center;　%绝对坐标系下的相对T
     
-    % iterate over pairwise combinations {(1,2),(1,3),(2,3),(1,4),(2,4).....(4,5)}
+    % iterate over pairwise combinations {(1,2),(1,3),(2,3),(1,4),(2,4).....(4,5)}   10个
     for i = 1:NN_count-1
         
         
